@@ -5,7 +5,6 @@
 
 TODO
 
-
 ## Example Playbook
 
 Inventory example
