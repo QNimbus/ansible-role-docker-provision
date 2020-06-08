@@ -1,14 +1,18 @@
-.PHONY: test clean
+.PHONY: all syntax-check test clean
 
-containers = provision_docker_host_one
+containers = apollo
 
-clean_command = docker rm -f $(containers) || true
+clean_command = docker rm -f $(containers) > /dev/null 2>&1 || true
 
 all: test
 
-test:
+syntax-check:
+	ansible-playbook $(PLAYBOOK).yml -i inventory --syntax-check
+
+test: PLAYBOOK=test
+test: syntax-check
 	$(clean_command)
-	ansible-playbook test.yml -i inventory --syntax-check
+	ansible-playbook test.yml -i inventory
 
 clean:
 	$(clean_command)

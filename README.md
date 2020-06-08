@@ -1,7 +1,6 @@
 # Ansible Role docker_provision
 
-[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/qnimbus/ansible-role-docker-provision/master?style=for-the-badge)](https://github.com/QNimbus/ansible-role-docker-provision) [![Travis (.org) branch](https://img.shields.io/travis/qnimbus/ansible-role-docker-provision/master?style=for-the-badge)](https://travis-ci.org/github/QNimbus/ansible-role-docker-provision) [https://img.shields.io/badge/galaxy-sensu.sensu-660198.svg?style=flat](https://galaxy.ansible.com/qnimbus/docker_provision/)
-
+[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/qnimbus/ansible-role-docker-provision/master?style=for-the-badge)](https://github.com/QNimbus/ansible-role-docker-provision) [![Travis (.org) branch](https://img.shields.io/travis/qnimbus/ansible-role-docker-provision/master?style=for-the-badge)](https://travis-ci.org/github/QNimbus/ansible-role-docker-provision)
 ## Role Variables
 
 TODO

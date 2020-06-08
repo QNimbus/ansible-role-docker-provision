@@ -13,7 +13,7 @@ install:
   - sudo apt-get install sshpass
 
   # Install Docker for Python
-  - pip install docker-py
+  - pip install docker
 
   # Install ansible
   - pip install ansible
