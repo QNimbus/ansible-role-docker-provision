@@ -8,9 +8,8 @@
   with_items: '{{ docker_provision_inventory_group }}'
 
 - name: Get container IP address.
-  local_action:
-    module: command
-    args: "docker inspect --format '{% raw %}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{% endraw %}' {{ item }}"
+  delegate_to: localhost
+  command: "docker inspect --format '{% raw %}{{ range .NetworkSettings.Networks }}{{ .IPAddress }}{{ end }}{% endraw %}' {{ item }}"
   register: docker_provision_ip
   changed_when: false
   with_items: '{{ docker_provision_inventory_group }}'
