@@ -40,7 +40,7 @@
 - block:
     - name: Change hosts connection to use Docker
       add_host:
-        name: '{{ item.1}}'
+        name: '{{ item.1 }}'
         docker_ip: '{{ docker_provision_ip.results[item.0].stdout }}'
         ansible_connection: docker
         ansible_user: root
