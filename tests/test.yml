@@ -1,0 +1,10 @@
+---
+- name: Bring up docker containers for network test cloud
+  hosts: localhost
+  vars:
+    inventory:
+      - name: provision_docker_host_one
+
+  roles:
+    - role: docker-provision
+      docker_provision_list: '{{ inventory }}'

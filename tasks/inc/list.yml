@@ -1,0 +1,67 @@
+---
+- name: Bring up list of hosts.
+  docker_container:
+    name: '{{ item.name }}'
+    image: '{{ item.image | default(docker_provision_default_image) }}'
+    network_mode: '{{ item.network_mode | default(docker_provision_network) }}'
+    privileged: '{{ item.privileged | default(docker_provision_privileged) }}'
+    state: '{{ item.state | default(docker_provision_state) }}'
+  with_items: '{{ docker_provision_list }}'
+
+- name: Get container IP address.
+  local_action:
+    module: command
+    args: "docker inspect --format '{% raw %}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{% endraw %}' {{ item.name }}"
+  register: docker_provision_ip
+  changed_when: false
+  with_items: '{{ docker_provision_list }}'
+
+  # Use SSH connection for docker hosts.
+- block:
+    - name: Add  hosts (SSH connection)
+      add_host:
+        name: '{{ item.1.name }}'
+        ansible_ssh_host: '{{ docker_provision_ip.results[item.0].stdout }}'
+        ansible_ssh_user: "{{ item.1['ansible_ssh_user'] | default(docker_provision_ssh_user) }}"
+        ansible_ssh_pass: "{{ item.1['ansible_ssh_pass'] | default(docker_provision_ssh_pass) }}"
+        groups: "{{ docker_provision_groups | union(item.1['groups'] | default([])) | join(',') }}"
+      changed_when: false
+      with_indexed_items: '{{ docker_provision_list }}'
+
+    - name: Wait for SSH connection.
+      wait_for:
+        host: "{{ hostvars[item.name]['ansible_ssh_host'] }}"
+        port: 22
+        timeout: 60
+        connect_timeout: 5
+      with_items: '{{ docker_provision_list }}'
+
+  when: not docker_provision_use_docker_connection
+
+  # Use Docker connection for docker hosts.
+- block:
+    - name: Add  hosts (Docker connection)
+      add_host:
+        name: '{{ item.1.name }}'
+        docker_ip: '{{ docker_provision_ip.results[item.0].stdout }}'
+        ansible_connection: docker
+        ansible_user: root
+        groups: "{{ docker_provision_groups | union(item.1['groups'] | default([])) | join(',') }}"
+      changed_when: false
+      with_indexed_items: '{{ docker_provision_list }}'
+  when: docker_provision_use_docker_connection
+
+  # Common configuration of docker hosts.
+- block:
+    - name: Set Python interpreter for hosts.
+      set_fact:
+        ansible_python_interpreter: "{{ hostvars[item.1]['ansible_python_interpreter'] | default(docker_provision_ansible_python_interpreter) }}"
+      delegate_to: '{{ item.1.name }}'
+      delegate_facts: true
+      changed_when: false
+      with_indexed_items: '{{ docker_provision_list }}'
+
+- name: Ensure hosts are reachable.
+  ping:
+  delegate_to: '{{ item.name }}'
+  with_items: '{{ docker_provision_list }}'

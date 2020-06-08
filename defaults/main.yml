@@ -1,0 +1,14 @@
+---
+docker_provision_use_docker_connection: false
+docker_provision_ansible_python_interpreter: /usr/bin/python3
+docker_provision_list: []
+docker_provision_inventory_group: []
+docker_provision_groups:
+  - 'docker_containers'
+
+docker_provision_default_image: 'qnimbus/ansible-ubuntu:20.04'
+docker_provision_state: started
+docker_provision_network: null
+docker_provision_privileged: true
+docker_provision_ssh_user: root
+docker_provision_ssh_pass: docker.io
