@@ -6,5 +6,5 @@
       - name: provision_docker_host_one
 
   roles:
-    - role: docker-provision
-      docker_provision_list: '{{ inventory }}'
+    - role: docker_provision
+      docker_provision_inventory: '{{ inventory }}'

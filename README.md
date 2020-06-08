@@ -1,38 +1,59 @@
-Role Name
-=========
+# Ansible Role docker_provision
 
-A brief description of the role goes here.
+[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/qnimbus/ansible-role-docker-provision/master?style=for-the-badge)](https://github.com/QNimbus/ansible-role-docker-provision) [![Travis (.org) branch](https://img.shields.io/travis/qnimbus/ansible-role-docker-provision/master?style=for-the-badge)](https://travis-ci.org/github/QNimbus/ansible-role-docker-provision) [https://img.shields.io/badge/galaxy-sensu.sensu-660198.svg?style=flat](https://galaxy.ansible.com/qnimbus/docker_provision/)
 
-Requirements
-------------
+## Role Variables
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+TODO
 
-Role Variables
---------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Example Playbook
 
-Dependencies
-------------
+Inventory example
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+```ini
+[containers]
+apollo image="qnimbus/ansible-ubuntu:20.04"
+ares image="qnimbus/ansible-ubuntu:20.04"
+```
 
-Example Playbook
-----------------
+Playbook example
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```yaml
+---
+- name: Bring up docker containers using Docker connection
+  hosts: localhost
+  roles:
+    - role: docker_provision
+      docker_provision_privileged: true,
+      docker_provision_inventory_group: "{{ groups['containers'] }}"
+      docker_provision_use_docker_connection: true
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- hosts: containers
+  tasks:
+    - name: Ensure containers are online
+      ping:
+```
 
-License
--------
+Or using a dynamic inventory
 
-MIT
+```yaml
+---
+- name: Bring up docker containers using Docker connection
+  hosts: localhost
+  vars:
+    inventory:
+      - name: apollo
+      - name: ares
+        image: 'qnimbus/ansible-ubuntu:20.04'
+      - name: hera
+        image: 'qnimbus/ansible-ubuntu:20.04'
+  roles:
+    - { role: docker_provision, docker_provision_privileged: true, docker_provision_inventory: '{{ inventory }}' }
+```
 
-Author Information
-------------------
+## TODO
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## License
+
+[MIT](LICENSE)

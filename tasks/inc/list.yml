@@ -6,14 +6,14 @@
     network_mode: '{{ item.network_mode | default(docker_provision_network) }}'
     privileged: '{{ item.privileged | default(docker_provision_privileged) }}'
     state: '{{ item.state | default(docker_provision_state) }}'
-  with_items: '{{ docker_provision_list }}'
+  with_items: '{{ docker_provision_inventory }}'
 
 - name: Get container IP address.
   delegate_to: localhost
   command: "docker inspect --format '{% raw %}{{ range .NetworkSettings.Networks }}{{ .IPAddress }}{{ end }}{% endraw %}' {{ item.name }}"
   register: docker_provision_ip
   changed_when: false
-  with_items: '{{ docker_provision_list }}'
+  with_items: '{{ docker_provision_inventory }}'
 
   # Use SSH connection for docker hosts.
 - block:
@@ -25,7 +25,7 @@
         ansible_ssh_pass: "{{ item.1['ansible_ssh_pass'] | default(docker_provision_ssh_pass) }}"
         groups: "{{ docker_provision_groups | union(item.1['groups'] | default([])) | join(',') }}"
       changed_when: false
-      with_indexed_items: '{{ docker_provision_list }}'
+      with_indexed_items: '{{ docker_provision_inventory }}'
 
     - name: Wait for SSH connection.
       wait_for:
@@ -33,7 +33,7 @@
         port: 22
         timeout: 60
         connect_timeout: 5
-      with_items: '{{ docker_provision_list }}'
+      with_items: '{{ docker_provision_inventory }}'
 
   when: not docker_provision_use_docker_connection
 
@@ -47,7 +47,7 @@
         ansible_user: root
         groups: "{{ docker_provision_groups | union(item.1['groups'] | default([])) | join(',') }}"
       changed_when: false
-      with_indexed_items: '{{ docker_provision_list }}'
+      with_indexed_items: '{{ docker_provision_inventory }}'
   when: docker_provision_use_docker_connection
 
   # Common configuration of docker hosts.
@@ -58,9 +58,9 @@
       delegate_to: '{{ item.1.name }}'
       delegate_facts: true
       changed_when: false
-      with_indexed_items: '{{ docker_provision_list }}'
+      with_indexed_items: '{{ docker_provision_inventory }}'
 
 - name: Ensure hosts are reachable.
   ping:
   delegate_to: '{{ item.name }}'
-  with_items: '{{ docker_provision_list }}'
+  with_items: '{{ docker_provision_inventory }}'

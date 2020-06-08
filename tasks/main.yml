@@ -1,7 +1,7 @@
 ---
 - name: Ensure required vars are defined
-  fail: msg="docker_provision_list or docker_provision_inventory_group is required"
-  when: 'docker_provision_list is not defined and docker_provision_inventory_group is not defined'
+  fail: msg="docker_provision_inventory or docker_provision_inventory_group is required"
+  when: 'docker_provision_inventory is not defined and docker_provision_inventory_group is not defined'
 
 - import_tasks: setup.yml
 
@@ -9,4 +9,4 @@
   when: (docker_provision_inventory_group | length) > 0
 
 - import_tasks: inc/list.yml
-  when: (docker_provision_list | length) > 0
+  when: (docker_provision_inventory | length) > 0
