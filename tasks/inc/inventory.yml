@@ -2,10 +2,18 @@
 - name: Bring up list of hosts.
   docker_container:
     name: '{{ item.name }}'
-    image: '{{ item.image | default(docker_provision_default_image) }}'
-    network_mode: '{{ item.network_mode | default(docker_provision_network) }}'
+    command: '{{ item.command | default(docker_provision_command) }}'
+    env: '{{ item.env | default(docker_provision_env) }}'
+    image: '{{ item.image | default(docker_provision_image) }}'
+    network_mode: '{{ item.network_mode | default(docker_provision_network_mode) }}'
+    ports: '{{ item.ports | default(docker_provision_ports) }}'
     privileged: '{{ item.privileged | default(docker_provision_privileged) }}'
+    pull: '{{ item.pull | default(docker_provision_pull) }}'
+    restart: '{{ item.restart | default(docker_provision_restart) }}'
+    restart_policy: '{{ item.restart_policy | default(docker_provision_restart_policy) }}'
     state: '{{ item.state | default(docker_provision_state) }}'
+    volumes: '{{ item.volumes | default(docker_provision_volumes) }}'
+    volumes_from: '{{ item.volumes_from | default(docker_provision_volumes_from) }}'
   with_items: '{{ docker_provision_inventory }}'
 
 - name: Get container IP address.

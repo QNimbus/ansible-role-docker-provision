@@ -6,9 +6,24 @@ docker_provision_inventory_group: []
 docker_provision_groups:
   - 'docker_containers'
 
-docker_provision_default_image: 'qnimbus/ansible-ubuntu:20.04'
-docker_provision_state: started
-docker_provision_network: null
-docker_provision_privileged: true
-docker_provision_ssh_user: root
+#
+# Docker container configuration.
+# See: https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameters
+#
+
+docker_provision_command: ~ # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-command
+docker_provision_env: {} # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-env
+docker_provision_image: 'qnimbus/ansible-ubuntu:20.04' # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-image
+docker_provision_network_mode: 'none' # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-network_mode
+docker_provision_ports: [] # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-published_ports
+docker_provision_privileged: false # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-privileged
+docker_provision_pull: false # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-pull
+docker_provision_restart: 'no' # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-restart
+docker_provision_restart_policy: 'no' # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-restart_policy
+docker_provision_state: started # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-state
+docker_provision_volumes: [] # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-volumes
+docker_provision_volumes_from: [] # https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#parameter-volumes_from
+
+# Other options
 docker_provision_ssh_pass: docker.io
+docker_provision_ssh_user: root

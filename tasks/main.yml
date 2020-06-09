@@ -8,5 +8,5 @@
 - import_tasks: inc/inventory_group.yml
   when: (docker_provision_inventory_group | length) > 0
 
-- import_tasks: inc/list.yml
+- import_tasks: inc/inventory.yml
   when: (docker_provision_inventory | length) > 0
