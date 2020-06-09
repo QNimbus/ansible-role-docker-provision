@@ -5,6 +5,7 @@
     command: '{{ hostvars[item].command | default(docker_provision_command) }}'
     env: '{{ hostvars[item].env | default(docker_provision_env) }}'
     image: '{{ hostvars[item].image | default(docker_provision_image) }}'
+    hostname: '{{ hostvars[item].hostname | default(item) }}'
     network_mode: '{{ hostvars[item].network_mode|default(docker_provision_network_mode) }}'
     ports: '{{ hostvars[item].ports | default(docker_provision_ports) }}'
     privileged: '{{ hostvars[item].privileged | default(docker_provision_privileged) }}'
@@ -12,6 +13,10 @@
     restart: '{{ hostvars[item].restart | default(docker_provision_restart) }}'
     restart_policy: '{{ hostvars[item].restart_policy | default(docker_provision_restart_policy) }}'
     state: '{{ hostvars[item].state | default(docker_provision_state) }}'
+    tmpfs: '{{ hostvars[item].tmpfs | default(docker_provision_tmpfs) }}'
+    tty: '{{ hostvars[item].tty | default(docker_provision_tty) }}'
+    volumes: '{{ hostvars[item].volumes | default(docker_provision_volumes) }}'
+    volumes_from: '{{ hostvars[item].volumes_from | default(docker_provision_volumes_from) }}'
   with_items: '{{ docker_provision_inventory_group }}'
 
 - name: Get container IP address.
