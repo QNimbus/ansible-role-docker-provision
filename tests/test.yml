@@ -1,5 +1,23 @@
 ---
 - hosts: localhost
   roles:
-    - role: docker_provision
+    - role: qnimbus.docker_provision
+      docker_provision_privileged: true
       docker_provision_inventory_group: "{{ groups['kobol'] }}"
+      # - hosts: localhost
+
+#   vars:
+#     inventory:
+#       - name: apollo
+#         image: 'qnimbus/ansible-ubuntu:20.04'
+#         volumes:
+#           - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+#         tmpfs:
+#           - '/run'
+#           - '/tmp'
+#         k3s_role: master
+
+# roles:
+#   - role: qnimbus.docker_provision
+#     docker_provision_privileged: true
+#     docker_provision_inventory: '{{ inventory }}'

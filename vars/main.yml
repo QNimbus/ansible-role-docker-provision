@@ -1,2 +1,18 @@
 ---
-# vars file for docker-provision
+docker_parameters:
+  - name
+  - command
+  - env
+  - hostname
+  - image
+  - network_mode
+  - ports
+  - privileged
+  - pull
+  - restart
+  - restart_policy
+  - state
+  - tty
+  - tmpfs
+  - volumes
+  - volumes_from
